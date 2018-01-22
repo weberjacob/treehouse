@@ -3,6 +3,11 @@
 const https = require('https');
 // const username = "jacobweber";
 
+// Print Error Message
+function printError(error) {
+  console.error(error.message);
+}
+
 // Print message to console
 function printMessage(username, badgecount, points) {
   const message = `${username} has ${badgecount} total badge(s) and ${points} points in Javascript`
@@ -23,17 +28,21 @@ function getProfile(username) {
 
       response.on('end', () => {
         // Parse the data
-        const profile = JSON.parse(body);
-        printMessage(username, profile.badges.length, profile.points.JavaScript);
+        try {
+          const profile = JSON.parse(body);
+          // Print the data
+          printMessage(username, profile.badges.length, profile.points.JavaScript);
+        } catch (error) {
+          printError(error);
+        }
         // console.dir(profile);
         // console.log(body);
         // console.log(typeof body);
-        // Print the data
       });
     });
     request.on('error', error => console.error(`Problem with request: ${error.message}`));
   } catch (error) {
-    console.error(error.message);
+    printError(error);
   }
 }
 
